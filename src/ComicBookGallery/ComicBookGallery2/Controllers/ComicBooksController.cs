@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace ComicBookGallery2.Controllers
 {
     public class ComicBooksController : Controller
-    {
+      {
         public ActionResult  Details()
         {
             var comicBook = new ComicBook()
