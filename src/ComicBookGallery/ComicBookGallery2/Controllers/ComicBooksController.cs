@@ -1,4 +1,5 @@
-﻿using ComicBookGallery2.Models;
+﻿using ComicBookGallery2.Data;
+using ComicBookGallery2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,23 +11,29 @@ namespace ComicBookGallery2.Controllers
 {
     public class ComicBooksController : Controller
       {
-        public ActionResult  Details()
+        private ComicBookRepository _comicBookReposoitory = null;
+
+        public ComicBooksController ()
         {
-            var comicBook = new ComicBook()
+            _comicBookReposoitory = new ComicBookRepository();
+        }
+
+        public ActionResult Index()
+        {
+            var comicBooks = _comicBookReposoitory.GetComicBooks();
+
+            return View(comicBooks);
+        }
+
+        public ActionResult  Details(int? id)
+        {
+            if (id == null)
             {
-                SeriesTitle = "The Amazing Spider-Man",
-                IssueNumber = 700,
-                DescriptionHtml = "<p>Final issue! Witness the final hours of Doctor Octopus' life and his one, last, great act of revenge! Even if Spider-Man survives... <strong>will Peter Parker?</strong></p>",
-                Artists = new Artist[]
-                {
-                    new Artist() {Name= "Dan Slott",  Role = "Script" },
-                    new Artist() {Name= "Humberto Ramos",  Role = "Pencils" },
-                    new Artist() {Name= "Victor Olazaba",  Role = "Inks" },
-                    new Artist() {Name= "Edgar Delgado",  Role = "Colors" },
-                    new Artist() {Name= "Chris Eliopoulos",  Role = "Letters" },
-                }
-            };
-            
+                return HttpNotFound();
+            }
+
+            var comicBook = _comicBookReposoitory.GetComicBook(id.Value);
+                      
             return View(comicBook);
         }
 
